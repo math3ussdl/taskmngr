@@ -1,1 +1,83 @@
-<router-outlet></router-outlet>
+<main
+  class="container min-vh-100 d-flex align-items-center justify-content-center"
+>
+  <div class="w-75 p-4 bg-dark rounded d-flex flex-column align-items-center">
+    <h3 class="text-light">Task Manager</h3>
+
+    <div
+      class="d-flex flex-column flex-md-row align-items-center justify-content-center mt-4"
+    >
+      <label for="new-task" class="form-label text-light mr-2 w-50"
+        >New Task</label
+      >
+      <input
+        type="text"
+        class="form-control me-2"
+        id="new-task"
+        placeholder="task name..."
+        [formControl]="task"
+      />
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="active"
+          [formControl]="active"
+        />
+        <label class="form-check-label text-light w-75" for="active">
+          Active?
+        </label>
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-column flex-md-row align-items-center justify-content-center mt-2 mb-4"
+    >
+      <button type="button" class="btn btn-primary me-4" (click)="addTask()">
+        Create
+      </button>
+      <button type="button" class="btn btn-info" (click)="getTasks()">
+        Refresh
+      </button>
+    </div>
+
+    <div *ngIf="loading()" class="lds-dual-ring"></div>
+    <span *ngIf="empty(); else tasksview" class="text-light"
+      >No tasks registered!</span
+    >
+
+    <ng-template #tasksview>
+      <div class="container text-center">
+        <div class="row row-cols-2">
+          <div
+            class="card col m-2"
+            style="width: 18rem"
+            *ngFor="let task of tasks()"
+          >
+            <div class="card-body">
+              <h5 class="card-title">Task #{{ task.id }}</h5>
+              <p class="card-text">
+                {{ task.description }}
+              </p>
+              <div
+                class="d-flex flex-column flex-md-row align-items-center justify-content-center mt-2"
+              >
+                <button
+                  class="btn me-2"
+                  [ngClass]="task.active ? 'btn-danger' : 'btn-success'"
+                  (click)="toggleTask(task)"
+                >
+                  {{ task.active ? "Undone!" : "Done!" }}
+                </button>
+
+                <button class="btn btn-danger" (click)="deleteTask(task.id)">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</main>
