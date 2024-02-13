@@ -82,7 +82,32 @@ export class AppComponent implements OnInit {
     }
   }
 
-  toggleTask(task: Task): void {}
+  toggleTask(task: Task): void {
+    try {
+      this.loading.set(true);
+      task.active = !task.active;
+
+      this.service.updateTask(task).subscribe((t) => {
+        this.tasks.set(this.tasks().map((tk) => (tk.id === t.id ? t : tk)));
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Task successfully updated!',
+          confirmButtonText: 'Ok!',
+        });
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: "Couldn't update task! Please try again.",
+        confirmButtonText: 'Ok!',
+      });
+    } finally {
+      this.loading.set(false);
+    }
+  }
 
   deleteTask(id: number): void {
     Swal.fire({

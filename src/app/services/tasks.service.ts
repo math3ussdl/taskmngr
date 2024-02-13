@@ -18,6 +18,10 @@ export class TasksService {
     });
   }
 
+  updateTask(task: Task): Observable<Task> {
+    return this.http.patch<Task>(this.baseApiUrl, task);
+  }
+
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(this.baseApiUrl);
   }
